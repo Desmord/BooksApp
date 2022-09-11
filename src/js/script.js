@@ -9,6 +9,8 @@
       book: '.book',
       bookImage: `.book__image`,
       bookName: `.book__name`,
+      bookRating: `.book__rating`,
+      bookRatingFill: `.book__rating__fill`,
     },
     filters: {
       panel: `.filters`
@@ -28,24 +30,23 @@
       const generateHTML = templates.book(book);
       const DOMElement = utils.createDOMFromHTML(generateHTML);
 
+      const ratingFill = DOMElement.querySelector(select.books.bookRatingFill);
+      const rating = book.rating;
+
+      ratingFill.style.width = `${(rating / 10) * 100}%`;
+
+      if (rating < 6) {
+        ratingFill.style.background = `linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)`;
+      } else if (rating >= 6 && rating <= 8) {
+        ratingFill.style.background = `linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)`;
+      } else if (rating > 8 && rating <= 9) {
+        ratingFill.style.background = `linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)`;
+      } else {
+        ratingFill.style.background = `linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)`;
+      }
+
       document.querySelector(select.books.booksList).appendChild(DOMElement);
     });
-
-  };
-
-
-  const handleBookDblClick = (event) => {
-    const bookImage = event.target.parentNode.parentNode;
-    const dataId = bookImage.getAttribute(`data-id`);
-    const isFavorite = favoriteBooks.some(id => id === dataId ? true : false);
-
-    if (isFavorite) {
-      favoriteBooks = favoriteBooks.filter(id => id !== dataId ? true : false);
-    } else {
-      favoriteBooks.push(dataId);
-    }
-
-    bookImage.classList.toggle(`favorite`);
 
   };
 
@@ -86,6 +87,22 @@
       });
 
     });
+
+  };
+
+
+  const handleBookDblClick = (event) => {
+    const bookImage = event.target.parentNode.parentNode;
+    const dataId = bookImage.getAttribute(`data-id`);
+    const isFavorite = favoriteBooks.some(id => id === dataId ? true : false);
+
+    if (isFavorite) {
+      favoriteBooks = favoriteBooks.filter(id => id !== dataId ? true : false);
+    } else {
+      favoriteBooks.push(dataId);
+    }
+
+    bookImage.classList.toggle(`favorite`);
 
   };
 
